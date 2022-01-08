@@ -10,17 +10,19 @@ RUN yum -y --setopt=tsflags=nodocs update && \
 	yum -y install maven && \
 	yum -y install wget && \
 	yum -y install java-1.8.0-openjdk && \
-    yum clean all
+	yum -y install python2 && \
+    yum clean all && \
+	ln -sf /usr/bin/python2 /usr/bin/python
 
 # Forked VSAQ Repo (https://github.com/google/vsaq) to correct submodule dependancies.
-# RUN	git clone --recursive https://github.com/umbraesoulsbane/vsaq/ /var/vsaq/core
+RUN	git clone --recursive https://github.com/umbraesoulsbane/vsaq/ /var/vsaq/core
 
-# -- START -- Uses the official repo and manually processes missing submodules. If you use the code above you can delete this block through END comment.
-RUN	git clone --recursive https://github.com/google/vsaq/ /var/vsaq/core
-RUN	git clone https://github.com/google/closure-templates /var/vsaq/third_party/closure-templates
-RUN	git clone https://github.com/google/safe-html-types/ /var/vsaq/third_party/safe-html-types
-RUN cp -r /var/vsaq/third_party/* /var/vsaq/core/third_party/
-# -- END --
+## # -- START -- Uses the official repo and manually processes missing submodules. If you use the code above you can delete this block through END comment.
+## RUN	git clone --recursive https://github.com/google/vsaq/ /var/vsaq/core
+## RUN	git clone https://github.com/google/closure-templates /var/vsaq/third_party/closure-templates
+## RUN	git clone https://github.com/google/safe-html-types/ /var/vsaq/third_party/safe-html-types
+## RUN cp -r /var/vsaq/third_party/* /var/vsaq/core/third_party/
+## # -- END --
 
 COPY ./vsaq/client_side_only_impl/*.* /var/vsaq/core/client_side_only_impl/
 COPY ./vsaq/static/* /var/vsaq/core/vsaq/static/
